@@ -33,6 +33,7 @@ class PyMCApplet(plasma.Applet):
 
         self.setHasConfigurationInterface(False)
         self.setAspectRatioMode(Plasma.IgnoreAspectRatio)
+        self.setMinimumSize(32*9,64)
 
         self.dialog = None
         self.player = Player()
@@ -49,15 +50,14 @@ class PyMCApplet(plasma.Applet):
         self.label.setText('40%')
 
         self.mlayout.addItem(self.label)
-        self.prev_bt = Plasma.PushButton()
-        self.prev_bt.setText('<-')
-        self.play_bt = Plasma.PushButton()
-        self.play_bt.setText('>')
+        self.prev_bt = MCLabel()
+        self.prev_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-skip-backward.png')
+        self.play_bt = MCLabel()
         self.play_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-playback-start.png')
-        self.stop_bt = Plasma.PushButton()
-        self.stop_bt.setText('-')
-        self.next_bt = Plasma.PushButton()
-        self.next_bt.setText('->')
+        self.stop_bt = MCLabel()
+        self.stop_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-playback-stop.png')
+        self.next_bt = MCLabel()
+        self.next_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-skip-forward.png')
 
         self.mlayout.addItem(self.prev_bt)
         self.mlayout.addItem(self.play_bt)
@@ -65,28 +65,25 @@ class PyMCApplet(plasma.Applet):
         self.mlayout.addItem(self.next_bt)
         self.setLayout(self.mlayout)
 
-        self.connect(self.prev_bt,SIGNAL('clicked()'),self.Prev)
-        self.connect(self.play_bt,SIGNAL('clicked()'),self.Play)
-        self.connect(self.stop_bt,SIGNAL('clicked()'),self.Stop)
-        self.connect(self.next_bt,SIGNAL('clicked()'),self.Next)
+        self.connect(self.prev_bt,SIGNAL('clicked'),self.Prev)
+        self.connect(self.play_bt,SIGNAL('clicked'),self.Play)
+        self.connect(self.stop_bt,SIGNAL('clicked'),self.Stop)
+        self.connect(self.next_bt,SIGNAL('clicked'),self.Next)
 
-        self.connect(self.label,SIGNAL('clicked'),self.l_clicked)
+        #self.connect(self.label,SIGNAL('clicked'),self.l_clicked)
 
     def timerEvent(self,ev):
-        pos = int(self.player.PositionGet())
-        len = int(self.player.GetMetadata()['mtime'])
-        self.label.setText(str(pos*100/len)+'%')
-
-    def l_clicked(self,event):
-        print 'ku'
-        pos = int(self.player.PositionGet())
-        len = int(self.player.GetMetadata()['mtime'])
-        self.label.setText(str(pos*100/len)+'%')
+        try:
+            pos = int(self.player.PositionGet())
+            len = int(self.player.GetMetadata()['mtime'])
+            self.label.setText(str(pos*100/len)+'%')
+        except: pass
 
     def Prev(self):
         self.player.Prev()
 
     def Play(self):
+        #st = self.player.
         self.player.Play()
 
     def Stop(self):
@@ -95,14 +92,11 @@ class PyMCApplet(plasma.Applet):
     def Next(self):
         self.player.Next()
 
-    def shape(self):
-        if self.theme.hasElement("hint-square-clock"):
-            return plasma.Applet.shape(self)
-        path = QPainterPath()
-        path.addEllipse(self.boundingRect().adjusted(-2, -2, 2, 2))
-        return path
-
-
+#    def shape(self):
+#        path = QPainterPath()
+#        path.addEllipse(self.boundingRect().adjusted(-2, -2, 2, 2))
+#        return path
+#
     def constraintsEvent(self, constraints):
         if constraints & Plasma.SizeConstraint:
             self.resize(self.size())

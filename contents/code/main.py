@@ -62,6 +62,8 @@ class PyMCApplet(plasma.Applet):
         self.prev_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-skip-backward.png')
         self.play_bt = MCLabel()
         self.play_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-playback-start.png')
+        self.pause_bt = MCLabel()
+        self.pause_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-playback-pause.png')
         self.stop_bt = MCLabel()
         self.stop_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-playback-stop.png')
         self.next_bt = MCLabel()
@@ -69,12 +71,14 @@ class PyMCApplet(plasma.Applet):
 
         self.mlayout.addItem(self.prev_bt)
         self.mlayout.addItem(self.play_bt)
+        self.mlayout.addItem(self.pause_bt)
         self.mlayout.addItem(self.stop_bt)
         self.mlayout.addItem(self.next_bt)
         self.setLayout(self.mlayout)
 
         self.connect(self.prev_bt,SIGNAL('clicked'),self.Prev)
         self.connect(self.play_bt,SIGNAL('clicked'),self.Play)
+        self.connect(self.pause_bt,SIGNAL('clicked'),self.Pause)
         self.connect(self.stop_bt,SIGNAL('clicked'),self.Stop)
         self.connect(self.next_bt,SIGNAL('clicked'),self.Next)
 
@@ -119,8 +123,10 @@ class PyMCApplet(plasma.Applet):
         self.player.Prev()
 
     def Play(self):
-        #st = self.player.
         self.player.Play()
+
+    def Pause(self):
+        self.player.Pause()
 
     def Stop(self):
         self.player.Stop()

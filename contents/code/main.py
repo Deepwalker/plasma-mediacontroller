@@ -87,7 +87,10 @@ class PyMCApplet(plasma.Applet):
 
     def redraw_vol(self,vol=None):
         if not vol:
-            vol = int(self.player.VolumeGet())
+            try:
+                vol = int(self.player.VolumeGet())
+            except:
+                vol = 0
         self.volume.setText("V:%s%%"%str(vol))
 
     def redraw_pos(self,pos=None):

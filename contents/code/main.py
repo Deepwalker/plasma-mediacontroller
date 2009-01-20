@@ -65,37 +65,24 @@ class PyMCApplet(plasma.Applet):
 
         self.mlayout.addItem(self.label)
         self.mlayout.addItem(self.volume)
-        self.prev_bt = MCLabel()
-        self.prev_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-skip-backward.png')
-        self.play_bt = MCLabel()
-        self.play_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-playback-start.png')
-        self.pause_bt = MCLabel()
-        self.pause_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-playback-pause.png')
-        self.stop_bt = MCLabel()
-        self.stop_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-playback-stop.png')
-        self.next_bt = MCLabel()
-        self.next_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-skip-forward.png')
+        
+        btns=[('prev_bt','media-skip-backward.png',self.Prev),
+            ('play_bt','media-playback-start.png',self.Play),
+            ('pause_bt','media-playback-pause.png',self.Pause),
+            ('stop_bt','media-playback-stop.png',self.Stop),
+            ('next_bt','media-skip-forward.png',self.Next)
+        ]
 
-        for i in dir(self):
-            bt=getattr(self,i)
-            print type(bt)
-            if ('bt' in i) and (type(bt)==MCLabel):
-                print "Button!"
-                bt.setMinimumWidth(30)
-                bt.setMaximumWidth(30)
+        for bt in btns:
+            setattr(self,bt[0],MCLabel())
+            but=getattr(self,bt[0])
+            but.setImage('/usr/share/icons/oxygen/32x32/actions/'+bt[1])
+            self.connect(but,SIGNAL('clicked'),bt[2])
+            self.mlayout.addItem(but)
+            but.setMinimumWidth(32)
+            but.setMaximumWidth(32)
 
-        self.mlayout.addItem(self.prev_bt)
-        self.mlayout.addItem(self.play_bt)
-        self.mlayout.addItem(self.pause_bt)
-        self.mlayout.addItem(self.stop_bt)
-        self.mlayout.addItem(self.next_bt)
         self.setLayout(self.mlayout)
-
-        self.connect(self.prev_bt,SIGNAL('clicked'),self.Prev)
-        self.connect(self.play_bt,SIGNAL('clicked'),self.Play)
-        self.connect(self.pause_bt,SIGNAL('clicked'),self.Pause)
-        self.connect(self.stop_bt,SIGNAL('clicked'),self.Stop)
-        self.connect(self.next_bt,SIGNAL('clicked'),self.Next)
 
         self.connect(self.label,SIGNAL('wheel'),self.change_pos)
         self.connect(self.volume,SIGNAL('wheel'),self.change_vol)

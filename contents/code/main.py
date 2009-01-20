@@ -22,6 +22,14 @@ class Player:
             except: pass
         return tryf
 
+class MCMeter(Plasma.Meter):
+    def mousePressEvent(self,event):
+        self.emit(SIGNAL('clicked'),event)
+
+    def wheelEvent(self,event):
+        print event.delta()
+        self.emit(SIGNAL('wheel'),event)
+
 class MCLabel(Plasma.Label):
     def setText(self,text):
         width = QFontMetrics(self.font()).width(text)
@@ -63,8 +71,17 @@ class PyMCApplet(plasma.Applet):
         self.volume = MCLabel()
         self.volume.setText('V:0%')
 
-        self.mlayout.addItem(self.label)
-        self.mlayout.addItem(self.volume)
+        #self.mlayout.addItem(self.label)
+        #self.mlayout.addItem(self.volume)
+
+        self.pos_meter=MCMeter()
+        self.pos_meter.setMeterType(Plasma.Meter.BarMeterVertical)
+        self.vol_meter=MCMeter()
+        self.vol_meter.setMeterType(Plasma.Meter.BarMeterVertical)
+        self.mlayout.addItem(self.pos_meter)
+        self.mlayout.addItem(self.vol_meter)
+        self.pos_meter.setMinimumWidth(32)
+        self.vol_meter.setMinimumWidth(32)
         
         btns=[('prev_bt','media-skip-backward.png',self.Prev),
             ('play_bt','media-playback-start.png',self.Play),
@@ -84,6 +101,9 @@ class PyMCApplet(plasma.Applet):
 
         self.setLayout(self.mlayout)
 
+        self.connect(self.pos_meter,SIGNAL('wheel'),self.change_pos)
+        self.connect(self.vol_meter,SIGNAL('wheel'),self.change_vol)
+
         self.connect(self.label,SIGNAL('wheel'),self.change_pos)
         self.connect(self.volume,SIGNAL('wheel'),self.change_vol)
 
@@ -94,6 +114,7 @@ class PyMCApplet(plasma.Applet):
             except:
                 vol = 0
         self.volume.setText("V:%s%%"%str(vol))
+        self.vol_meter.setValue(vol)
 
     def redraw_pos(self,pos=None):
         if not pos:
@@ -104,6 +125,7 @@ class PyMCApplet(plasma.Applet):
             except:
                 pos=0
         self.label.setText("P:%s%%"%str(pos))
+        self.pos_meter.setValue(pos)
 
     def timerEvent(self,ev):
         self.redraw_pos()

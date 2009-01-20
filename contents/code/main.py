@@ -23,8 +23,15 @@ class Player:
         return tryf
 
 class MCLabel(Plasma.Label):
+    def setText(self,text):
+        width = QFontMetrics(self.font()).width(text)
+        self.setMinimumWidth(width)
+        self.setMaximumWidth(width)
+        Plasma.Label.setText(self,text)
+        
     def mousePressEvent(self,event):
         self.emit(SIGNAL('clicked'),event)
+
     def wheelEvent(self,event):
         print event.delta()
         self.emit(SIGNAL('wheel'),event)
@@ -38,7 +45,7 @@ class PyMCApplet(plasma.Applet):
 
         self.setHasConfigurationInterface(False)
         self.setAspectRatioMode(Plasma.IgnoreAspectRatio)
-        self.setMinimumSize(32*8,64)
+        #self.setMinimumSize(32*8,64)
 
         self.dialog = None
         self.player = Player('org.kde.amarok')
@@ -68,6 +75,14 @@ class PyMCApplet(plasma.Applet):
         self.stop_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-playback-stop.png')
         self.next_bt = MCLabel()
         self.next_bt.setImage('/usr/share/icons/oxygen/32x32/actions/media-skip-forward.png')
+
+        for i in dir(self):
+            bt=getattr(self,i)
+            print type(bt)
+            if ('bt' in i) and (type(bt)==MCLabel):
+                print "Button!"
+                bt.setMinimumWidth(30)
+                bt.setMaximumWidth(30)
 
         self.mlayout.addItem(self.prev_bt)
         self.mlayout.addItem(self.play_bt)

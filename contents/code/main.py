@@ -53,7 +53,7 @@ class PyMCApplet(plasma.Applet):
 
         self.setHasConfigurationInterface(False)
         self.setAspectRatioMode(Plasma.IgnoreAspectRatio)
-        #self.setMinimumSize(32*8,64)
+        #self.setMaximumWidth(32*7)
 
         self.dialog = None
         self.player = Player('org.kde.amarok')
@@ -80,8 +80,8 @@ class PyMCApplet(plasma.Applet):
         self.vol_meter.setMeterType(Plasma.Meter.BarMeterVertical)
         self.mlayout.addItem(self.pos_meter)
         self.mlayout.addItem(self.vol_meter)
-        self.pos_meter.setMinimumWidth(32)
-        self.vol_meter.setMinimumWidth(32)
+        self.pos_meter.setMaximumWidth(32)
+        self.vol_meter.setMaximumWidth(32)
         
         btns=[('prev_bt','media-skip-backward.png',self.Prev),
             ('play_bt','media-playback-start.png',self.Play),

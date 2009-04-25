@@ -3,8 +3,10 @@ Encoding=UTF-8
 Name=Mediaplayer controller
 Type=Service
 ServiceTypes=Plasma/Applet
-X-Plasma-API=python
 Icon=chronometer
+
+X-Plasma-API=python
+X-Plasma-MainScript=code/main.py
 
 X-KDE-PluginInfo-Author=Mikhail Krivushin
 X-KDE-PluginInfo-Email=mkrivushin@yandex.ru

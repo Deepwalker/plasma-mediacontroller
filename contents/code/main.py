@@ -2,11 +2,10 @@
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import * 
-from PyQt4 import QtWebKit
 from PyKDE4.kdecore import *
 from PyKDE4.kdeui import *  
 from PyKDE4.plasma import Plasma
-import plasma                   
+from PyKDE4 import plasmascript as plasma
 import dbus
 
 class Player:
@@ -80,8 +79,10 @@ class PyMCApplet(plasma.Applet):
         self.vol_meter.setMeterType(Plasma.Meter.BarMeterVertical)
         self.mlayout.addItem(self.pos_meter)
         self.mlayout.addItem(self.vol_meter)
-        self.pos_meter.setMaximumWidth(32)
-        self.vol_meter.setMaximumWidth(32)
+        self.pos_meter.setMaximumWidth(16)
+        self.pos_meter.setMaximumHeight(32)
+        self.vol_meter.setMaximumWidth(16)
+        self.vol_meter.setMaximumHeight(32)
         
         btns=[('prev_bt','media-skip-backward.png',self.Prev),
             ('play_bt','media-playback-start.png',self.Play),
@@ -98,6 +99,7 @@ class PyMCApplet(plasma.Applet):
             self.mlayout.addItem(but)
             but.setMinimumWidth(32)
             but.setMaximumWidth(32)
+            but.setMaximumHeight(32)
 
         self.setLayout(self.mlayout)
 
